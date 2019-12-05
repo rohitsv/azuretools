@@ -34,7 +34,7 @@ public class AdlsUploader {
         String storeName = props.getProperty("azure.adls.storename");
         String accountFQDN = props.getProperty("azure.adls.accountfqdn");
         String adlsFileUploadDir = props.getProperty("azure.adls.fileuploaddir");
-        String marketRefOutDir = props.getProperty("tomcat.marketrefoutdir");
+        String inputfiles = props.getProperty("tomcat.inputfiles");
 
         boolean validInput = false;
         if (clientId == null || clientId.isEmpty()) {
@@ -51,8 +51,8 @@ public class AdlsUploader {
             logger.error("accountFQDN cannot be null or empty");
         } else if (adlsFileUploadDir == null || adlsFileUploadDir.isEmpty()) {
             logger.error("adlsFileUploadDir cannot be null or empty");
-        } else if (marketRefOutDir == null || marketRefOutDir.isEmpty()) {
-            logger.error("marketRefOutDir cannot be null or empty");
+        } else if (inputfiles == null || inputfiles.isEmpty()) {
+            logger.error("inputfiles cannot be null or empty");
         } else {
             validInput = true;
         }
@@ -83,8 +83,8 @@ public class AdlsUploader {
                 System.out.println("rootDirCreated = " + rootDirCreated);
 
                 // upload files
-                File fmarketRefOutDir = new File(marketRefOutDir);
-                for (File eachSubFolder : fmarketRefOutDir.listFiles()) {
+                File fInputfiles = new File(inputfiles);
+                for (File eachSubFolder : fInputfiles.listFiles()) {
                     if (eachSubFolder.isDirectory()) {
                         for (File eachFile : eachSubFolder.listFiles()) {
                             if (eachFile.isFile()) {
