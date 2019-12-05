@@ -23,7 +23,7 @@ public class AdlsUploader {
 
         int exitCode = SUCCESS_EXIT_CODE;
 
-        String dmPropertiesLocation = "C:\\Users\\Rohit\\Documents\\adls\\src\\main\\resources\\app.properties";
+        String dmPropertiesLocation = "C:\\Users\\Rohit\\Documents\\workspace\\azuretools\\src\\main\\resources\\app.properties";
         Properties props = new Properties();
         props.load(new FileReader(dmPropertiesLocation));
 
@@ -73,11 +73,14 @@ public class AdlsUploader {
                 // create ADLS root directory if it does not exists
                 boolean rootDirExists = client.checkExists(adlsFileUploadDir);
                 System.out.println("rootDirExists = " + rootDirExists);
-                if (!rootDirExists) {
-                    System.out.println("creating root dir " + adlsFileUploadDir);
-                    boolean rootDirCreated = client.createDirectory(adlsFileUploadDir);
-                    System.out.println("rootDirCreated = " + rootDirCreated);
+                if (rootDirExists) {
+                    System.out.println("clearing old files " + adlsFileUploadDir);
+                    boolean oldFilesCleared = client.deleteRecursive(adlsFileUploadDir);
+                    System.out.println("old files cleared =  " + oldFilesCleared);
                 }
+                System.out.println("creating root dir " + adlsFileUploadDir);
+                boolean rootDirCreated = client.createDirectory(adlsFileUploadDir);
+                System.out.println("rootDirCreated = " + rootDirCreated);
 
                 // upload files
                 File fmarketRefOutDir = new File(marketRefOutDir);
@@ -101,7 +104,7 @@ public class AdlsUploader {
                     }
                 }
             } catch (Exception e) {
-                logger.error("Exception occurred while copying files to ADLS", e);
+                System.out.println("Exception occurred while copying files to ADLS" + e);
                 exitCode = GENERIC_EXCEPTION_EXIT_CODE;
             }
         }
